@@ -1,17 +1,7 @@
-.POSIX:
-CC     = cc
-CFLAGS = -std=c99 -Wall -Wextra -O3 -g3
+all: tracer tracee
 
-all: minimal_strace xpledge example
+tracer: tracer.c
+	gcc tracer.c -o tracer
 
-minimal_strace: minimal_strace.c
-	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ minimal_strace.c
-
-xpledge: xpledge.c
-	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ xpledge.c
-
-example: example.c xpledge.h
-	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ example.c
-
-clean:
-	rm -f minimal_strace xpledge example
+tracee: tracee.c
+	gcc tracee.c -o tracee
