@@ -1,0 +1,12 @@
+[package]
+name = "mine"
+version = "0.1.0"
+authors = ["Sönke Hahn <soenkehahn@gmail.com>"]
+edition = "2018"
+
+[build-dependencies]
+cc = "*"
+
+[dependencies]
+libc = "*"
+nix = "*"

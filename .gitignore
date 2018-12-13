@@ -1,5 +1,4 @@
 example
 minimal_strace
 xpledge
-tracer
-tracee
+/mine/target/

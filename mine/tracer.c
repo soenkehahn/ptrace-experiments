@@ -11,7 +11,7 @@
 int exec_child() {
   const char* filename = "./tracee";
   char* empty[] = { NULL };
-  int output = execve(filename, empty, empty);
+  execve(filename, empty, empty);
   return 0;
 }
 
@@ -30,10 +30,8 @@ void debug_syscall_enter_stop(int child_pid) {
   }
 }
 
-int main() {
-  int id = fork();
-  if (id < 0) {
-  } else if (id == 0) {
+int main_(int id) {
+  if (id == 0) {
     // child
     ptrace(PTRACE_TRACEME, NULL, NULL, NULL);
     raise(SIGSTOP);
@@ -51,4 +49,5 @@ int main() {
       ptrace(PTRACE_SYSCALL, child_pid, NULL, NULL);
     }
   }
+  return 0;
 }
