@@ -1,7 +1,9 @@
-pub fn get_syscall(number: u64) -> &'static str {
+use libc::user_regs_struct;
+
+pub fn get_syscall(registers: user_regs_struct) -> &'static str {
     syscalls()
         .into_iter()
-        .filter(|(i, _name)| i == &number)
+        .filter(|(i, _name)| i == &registers.orig_rax)
         .next()
         .unwrap()
         .1

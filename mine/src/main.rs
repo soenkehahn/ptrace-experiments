@@ -83,10 +83,10 @@ fn debug_syscall(child: Pid) -> Result<(), AppError> {
             (&mut registers) as *mut _ as *mut c_void,
         )?;
     }
-    let syscall = registers.orig_rax;
+    let syscall = get_syscall(registers);
     println!(
         "{}({}, {}, {}, {}, {}, {})",
-        get_syscall(syscall),
+        syscall,
         registers.rdi,
         registers.rsi,
         registers.rdx,
@@ -94,7 +94,7 @@ fn debug_syscall(child: Pid) -> Result<(), AppError> {
         registers.r8,
         registers.r9
     );
-    if get_syscall(syscall) == "__NR_execve" {
+    if syscall == "__NR_execve" {
         let filename = registers.rdi as *const c_char;
         if filename != std::ptr::null() {
             println!("child process spawned: {:?}", unsafe {
