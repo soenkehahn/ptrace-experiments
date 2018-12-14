@@ -85,14 +85,15 @@ fn debug_syscall(child: Pid) -> Result<(), AppError> {
     }
     let syscall = get_syscall(registers);
     println!(
-        "{}({}, {}, {}, {}, {}, {})",
+        "{}({}, {}, {}, {}, {}, {}) [rax: {}]",
         syscall,
         registers.rdi,
         registers.rsi,
         registers.rdx,
         registers.r10,
         registers.r8,
-        registers.r9
+        registers.r9,
+        registers.rax
     );
     match syscall {
         "__NR_execve" => {
