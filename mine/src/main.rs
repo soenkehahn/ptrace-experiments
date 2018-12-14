@@ -1,4 +1,5 @@
 extern crate libc;
+extern crate mine;
 
 use libc::c_char;
 use libc::user_regs_struct;
@@ -12,6 +13,8 @@ use std::ffi::c_void;
 use std::ffi::CStr;
 use std::ffi::CString;
 use std::ptr::null_mut;
+
+use mine::syscall::get_syscall;
 
 extern "C" {
     fn exec_child();
@@ -69,20 +72,29 @@ fn wait_for_sigstop(child: Pid) -> Result<(), AppError> {
 }
 
 fn debug_syscall(child: Pid) -> Result<(), AppError> {
-    let mut regs: user_regs_struct = new_user_regs_struct();
+    let mut registers: user_regs_struct = new_user_regs_struct();
     #[allow(deprecated)]
     unsafe {
         ptrace::ptrace(
             Request::PTRACE_GETREGS,
             child,
             null_mut(),
-            (&mut regs) as *mut _ as *mut c_void,
+            (&mut registers) as *mut _ as *mut c_void,
         )?;
     }
-    let syscall = regs.orig_rax;
+    let syscall = registers.orig_rax;
+    println!(
+        "{}({}, {}, {}, {}, {}, {})",
+        get_syscall(syscall),
+        registers.rdi,
+        registers.rsi,
+        registers.rdx,
+        registers.r10,
+        registers.r8,
+        registers.r9
+    );
     if syscall == __NR_EXECVE {
-        println!("exec");
-        let filename = regs.rdi as *const c_char;
+        let filename = registers.rdi as *const c_char;
         if filename != std::ptr::null() {
             println!("child process spawned: {:?}", unsafe {
                 CStr::from_ptr(filename)
