@@ -94,13 +94,16 @@ fn debug_syscall(child: Pid) -> Result<(), AppError> {
         registers.r8,
         registers.r9
     );
-    if syscall == "__NR_execve" {
-        let filename = registers.rdi as *const c_char;
-        if filename != std::ptr::null() {
-            println!("child process spawned: {:?}", unsafe {
-                CStr::from_ptr(filename)
-            });
+    match syscall {
+        "__NR_execve" => {
+            let filename = registers.rdi as *const c_char;
+            if filename != std::ptr::null() {
+                println!("child process spawned: {:?}", unsafe {
+                    CStr::from_ptr(filename)
+                });
+            }
         }
-    };
+        _ => {}
+    }
     Ok(())
 }
