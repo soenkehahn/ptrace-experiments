@@ -43,18 +43,28 @@ fn main() -> Result<(), AppError> {
                 unsafe { exec_child() };
             }
         }
-        ForkResult::Parent { child } => loop {
-            match waitpid(child, None)? {
-                WaitStatus::Exited(..) => {
-                    break;
+        ForkResult::Parent { child } => {
+            wait_for_sigstop(child)?;
+            loop {
+                ptrace::syscall(child)?;
+                match waitpid(child, None)? {
+                    WaitStatus::Exited(..) => {
+                        break;
+                    }
+                    _ => {}
                 }
-                _ => {
-                    debug_syscall(child)?;
-                    ptrace::syscall(child)?;
-                }
+                debug_syscall(child)?;
             }
-        },
+        }
     };
+    Ok(())
+}
+
+fn wait_for_sigstop(child: Pid) -> Result<(), AppError> {
+    match waitpid(child, None)? {
+        WaitStatus::Stopped(_, Signal::SIGSTOP) => {}
+        _ => panic!("SIGSTOP expected"),
+    }
     Ok(())
 }
 
