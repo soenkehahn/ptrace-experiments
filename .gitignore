@@ -1,3 +1,2 @@
-example
-minimal_strace
-xpledge
+/target/
+/tracee
