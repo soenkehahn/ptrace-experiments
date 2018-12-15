@@ -1,4 +1,2 @@
-all: tracee
-
-tracee: tracee.rs
-	rustc tracee.rs
+all:
+	cargo run --bin tracer

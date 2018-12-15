@@ -4,6 +4,14 @@ version = "0.1.0"
 authors = ["Sönke Hahn <soenkehahn@gmail.com>"]
 edition = "2018"
 
+[[bin]]
+name = "tracer"
+path = "src/main.rs"
+
+[[bin]]
+name = "tracee"
+path = "tracee.rs"
+
 [build-dependencies]
 cc = "*"
 
