@@ -10,7 +10,7 @@ path = "src/main.rs"
 
 [[bin]]
 name = "tracee"
-path = "tracee.rs"
+path = "src/tracee.rs"
 
 [build-dependencies]
 cc = "*"
