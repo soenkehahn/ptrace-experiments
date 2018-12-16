@@ -1,5 +1,5 @@
 extern crate libc;
-extern crate mine;
+extern crate ptrace_experiments;
 
 use libc::c_char;
 use libc::user_regs_struct;
@@ -14,8 +14,8 @@ use std::ffi::CStr;
 use std::ffi::CString;
 use std::ptr::null_mut;
 
-use mine::registers::new_user_regs_struct;
-use mine::syscall::get_syscall;
+use ptrace_experiments::registers::new_user_regs_struct;
+use ptrace_experiments::syscall::get_syscall;
 
 extern "C" {
     fn exec_child();
