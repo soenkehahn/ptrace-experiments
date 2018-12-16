@@ -42,7 +42,7 @@ fn main() -> Result<(), AppError> {
             ptrace::traceme()?;
             raise(Signal::SIGSTOP)?;
             if false {
-                execv(&CString::new("./tracee")?, &vec![])?;
+                execv(&CString::new("./target/debug/tracee")?, &vec![])?;
             } else {
                 unsafe { exec_child() };
             }
@@ -51,7 +51,8 @@ fn main() -> Result<(), AppError> {
             wait_for_sigstop(child)?;
             loop {
                 ptrace::syscall(child)?;
-                match waitpid(child, None)? {
+                let status = waitpid(child, None)?;
+                match status {
                     WaitStatus::Exited(..) => {
                         break;
                     }
