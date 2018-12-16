@@ -1,5 +1,7 @@
 extern crate cc;
 
 fn main() {
-    cc::Build::new().file("src/tracer.c").compile("tracer_c");
+    cc::Build::new()
+        .file("src/exec_child.c")
+        .compile("tracer_c");
 }

@@ -6,7 +6,7 @@ edition = "2018"
 
 [[bin]]
 name = "tracer"
-path = "src/main.rs"
+path = "src/tracer.rs"
 
 [[bin]]
 name = "tracee"
